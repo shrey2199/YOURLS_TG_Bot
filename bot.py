@@ -12,16 +12,12 @@ from random import *
 min_char = 4
 max_char = 6
 
-
-
 # CONFIG
 
 API_TOKEN = ''
 YL_DOMAIN = '' # ==> Without https:// or http://
 YL_SIG = ''
 ADMIN_IDS = ['',''] # ==> Enter Admin Chat IDs here !!
-
-
 
 # BOT CODE
 
@@ -58,7 +54,7 @@ def start(m):
 @bot.message_handler(commands=['help'])
 @restricted
 def help(m):
-	bot.send_message(chat_id=m.chat.id, text="""This Bot can Shorten Your URLs with support for Custom Keywords.
+    bot.send_message(chat_id=m.chat.id, text="""This Bot can Shorten Your URLs with support for Custom Keywords.
     \n<b>For using Random Keyword :-</b>
     Send /short <code>&lt;link&gt;</code>
     \n<b>For using Custom Keyword :-</b>
@@ -84,30 +80,30 @@ def short(m):
         elink = urllib.parse.quote(link)
         allchar = "abcdefghijklmnopqrstuvwxyz0123456789"
         if len(m.text.split()) == 3:
-        	word = m.text.split()[2]
+            word = m.text.split()[2]
         if len(m.text.split()) == 2:
-        	word = "".join(choice(allchar) for x in range(randint(min_char, max_char)))
+            word = "".join(choice(allchar) for x in range(randint(min_char, max_char)))
         url = 'https://'+YL_DOMAIN+'/yourls-api.php?signature='+YL_SIG+'&action=shorturl&url=' + elink + '&keyword=' + word + '&format=json'
 
         try:
             r = requests.get(url)
             res = r.json()
             if res["statusCode"] == 200:
-            	if res["status"] == str("success"):
-            		bot.send_message(m.chat.id, "*Shortened URL :*\t\t" + str(res["shorturl"]), parse_mode='Markdown', disable_web_page_preview=True)
-            	if res["status"] == str("fail"):
-            		if res["code"] == str("error:url"):
-            			error_message = "*Error :\t\t*" + str(res["message"])
-            			url_message = "*It's Shortened URL :\t\t*" + str(res["shorturl"])
-            			bot.send_message(m.chat.id, error_message + 
+                if res["status"] == str("success"):
+                    bot.send_message(m.chat.id, "*Shortened URL :*\t\t" + str(res["shorturl"]), parse_mode='Markdown', disable_web_page_preview=True)
+                if res["status"] == str("fail"):
+                    if res["code"] == str("error:url"):
+                        error_message = "*Error :\t\t*" + str(res["message"])
+                        url_message = "*It's Shortened URL :\t\t*" + str(res["shorturl"])
+                        bot.send_message(m.chat.id, error_message + 
                         "\n\n" + url_message, parse_mode='Markdown', disable_web_page_preview=True)
-            		if res["code"] == str("error:keyword"):
-            			error_message = "<b>Error :\t\t</b>" + str(res["message"] + "\n\nFor More Info about <b>" + word + "</b> keyword :-\n\nSend /info <code>" + word +"</code> to the Bot.")
-            			bot.send_message(m.chat.id, error_message, parse_mode=telegram.ParseMode.HTML, disable_web_page_preview=True)
+                    if res["code"] == str("error:keyword"):
+                        error_message = "<b>Error :\t\t</b>" + str(res["message"] + "\n\nFor More Info about <b>" + word + "</b> keyword :-\n\nSend /info <code>" + word +"</code> to the Bot.")
+                        bot.send_message(m.chat.id, error_message, parse_mode=telegram.ParseMode.HTML, disable_web_page_preview=True)
             else:
                 bot.send_message(m.chat.id, "*Error :\t\t*" + str(res["message"]), parse_mode='Markdown', disable_web_page_preview=True)
         except:
-            bot.send_message(m.chat.id, text = "An error occurred sending http request.", parse_mode=telegram.ParseMode.HTML)
+            bot.send_message(m.chat.id, text = "*Error :\t\t*YOURLS SERVER NOT REACHABLE; TRY AGAIN LATER", parse_mode='Markdown')
 
 @bot.message_handler(commands=['info'])
 @restricted
@@ -130,10 +126,11 @@ def info(m):
                 "\n*Created :\t\t*" + str(res["link"]["timestamp"]) +
                 "\n*Clicks :\t\t*" + str(res["link"]["clicks"]), parse_mode='Markdown')
                 print("RESPONSE: " + str(res))
-            if res["statusCode"] == 404:
-                bot.send_message(m.chat.id, "*Error :\t\t*Short URL not found.", parse_mode='Markdown')
             else:
-                bot.send_message(m.chat.id, str(res["message"]), parse_mode='Markdown')
+                if res["statusCode"] == 404:
+                    bot.send_message(m.chat.id, "*Error :\t\t*Short URL not found.", parse_mode='Markdown')
+                else:
+                    bot.send_message(m.chat.id, str(res["message"]), parse_mode='Markdown')
         except json.JSONDecodeError:
             bot.send_message(m.chat.id, "*Error :\t\t*YOURLS SERVER NOT REACHABLE; TRY AGAIN LATER", parse_mode='Markdown')
 
@@ -154,10 +151,11 @@ def info(m):
             res = r.json()
             if res["statusCode"] == 200:
                 bot.send_message(m.chat.id, "The <b>link/keyword</b>: <code>"+link+"</code> has been successfully deleted.", parse_mode=telegram.ParseMode.HTML)
-            if res["statusCode"] == 404:
-                bot.send_message(m.chat.id, "*Error :\t\t*Short URL not found.", parse_mode='Markdown')
             else:
-                bot.send_message(m.chat.id, str(res["message"]), parse_mode='Markdown')
+                if res["statusCode"] == 404:
+                    bot.send_message(m.chat.id, "*Error :\t\t*Short URL not found.", parse_mode='Markdown')
+                else:
+                    bot.send_message(m.chat.id, str(res["message"]), parse_mode='Markdown')
         except json.JSONDecodeError:
             bot.send_message(m.chat.id, "*Error :\t\t*YOURLS SERVER NOT REACHABLE; TRY AGAIN LATER", parse_mode='Markdown')
 
