@@ -12,19 +12,25 @@ from random import *
 min_char = 4
 max_char = 6
 
+
+
 # CONFIG
 
 API_TOKEN = ''
 YL_DOMAIN = '' # ==> Without https:// or http://
 YL_SIG = ''
-try:
-    ADMIN_LIST = ['','']  # ==> Enter Admin Chat IDs here !!
-    restricted_mode = True
-except:
-    ADMIN_LIST = []  # ==> Do Not Touch This !!
-    restricted_mode = False
+ADMIN_IDS = ['',''] # ==> Enter Admin Chat IDs here !!
+
+
 
 # BOT CODE
+
+try:
+    ADMIN_LIST = ADMIN_IDS 
+    restricted_mode = True
+except:
+    ADMIN_LIST = []
+    restricted_mode = False
 
 bot = telebot.TeleBot(API_TOKEN)
 logger = telebot.logger
