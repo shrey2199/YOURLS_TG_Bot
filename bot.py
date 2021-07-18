@@ -14,10 +14,12 @@ max_char = 6
 
 # CONFIG
 
-API_TOKEN = ''
-YL_DOMAIN = '' # ==> Without https:// or http://
-YL_SIG = ''
-ADMIN_IDS = ['',''] # ==> Enter Admin Chat IDs here !!
+from config import Config
+
+API_TOKEN = Config.BOT_TOKEN
+YL_DOMAIN = Config.YL_DOMAIN
+YL_SIG = Config.YL_SIG
+ADMIN_IDS = Config.ADMIN_IDS
 
 # BOT CODE
 
@@ -25,7 +27,7 @@ try:
     ADMIN_LIST = ADMIN_IDS 
     restricted_mode = True
 except:
-    ADMIN_LIST = []
+    ADMIN_LIST = []  # ==> Do Not Touch This !!
     restricted_mode = False
 
 bot = telebot.TeleBot(API_TOKEN)

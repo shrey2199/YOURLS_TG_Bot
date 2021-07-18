@@ -1,0 +1,38 @@
+{
+    "name": "YOURLS_TG_Bot",
+    "description": "A Telegram bot for YOURLS Management",
+    "logo": "",
+    "keywords": [
+      "bot",
+      "telegram",
+      "python"
+    ],
+    "repository": "https://github.com/shrey2199/YOURLS_TG_Bot",
+    "website": "https://github.com/shrey2199/YOURLS_TG_Bot",
+    "success_url": "https://t.me/s_rawal",
+    "env": {
+      
+      "BOT_TOKEN": {
+        "description": "The telegram bot token that you get from @BotFather.",
+        "required": true
+      },
+      "YL_SIG": {
+        "description": "Your YOURLS Signature.",
+        "required": true
+      },
+      "YL_DOMAIN": {
+        "description": "Your YOULS Domain without https:// or http://",
+        "required": true
+      },
+      "ADMIN_IDS": {
+        "description": "The Telegram User ID of the Owner of the Bot. Get it by using /info in @MissRose_bot.",
+        "required": false
+      }
+    },
+    "formation": {
+            "worker": {
+                "quantity": 1,
+                "size": "free"
+            }
+      }
+}
